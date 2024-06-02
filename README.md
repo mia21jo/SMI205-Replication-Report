@@ -21,6 +21,7 @@ To determine whether the impact of employment income loss on mental health durin
 ## Project Documentation 
 
 -*README.md:* this file
+
 -*SMI205_Preregistration_form:* preregistration document for this replication extension
 
 ## Dataset
