@@ -1,0 +1,413 @@
+---
+title: "SMI205 Replication Project (2024)"
+author: "210193628"
+date: "20/05/2024"
+output: 
+  html_document: 
+    code_download: true
+    toc: true
+    toc_depth: 2
+    toc_float: 
+      collapsed: false
+      smooth_scroll: true
+---
+
+```{r start, include=FALSE}
+# Opening key libraries first
+library(rmarkdown)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(summarytools)
+```
+
+# Does The Impact of Employment Income Loss On Mental Health Vary Between Individuals Living Alone And Those Living With Others During The COVID-19
+
+### Rpubs link: https://rpubs.com/J210193628
+### GitHub Repository: https://github.com/mia21jo/SMI205-Replication-Report
+### Study Preregistration form: https://rpubs.com/J210193628/1184198
+
+## Information about this replication project
+* Cui, J. et al. (2022) Covid-19 impact on mental health - BMC Medical Research methodology, BioMed Central. Available at: https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01411-w (Accessed: 05 May 2024). DOI - https://doi.org/10.1186/s12874-021-01411-w
+
+* Replication method: Cui J, Lu J, Weng Y. R code for COVID 19 Impact on mental health over time [Internet]. GitHub; 2021 [updated 2021 Sep 9; cited 2021 Sep 9]. Available from: https://github.com/JingyuCui639/R-code-for-COVID-19-Impact-on-Mental-Health-over-Time 
+
+## Workspace setup {.tabset .tabset-pills}
+
+### YAML settings
+
+ output: </br>
+  &nbsp; html_document: </br>
+    &nbsp;&nbsp; code_download: true </br>
+    &nbsp;&nbsp;&nbsp; toc: true </br>
+    &nbsp;&nbsp;&nbsp; toc_depth: 2 </br>
+    &nbsp;&nbsp;&nbsp; toc_float: </br>
+      &nbsp;&nbsp;&nbsp;&nbsp; collapsed: false </br>
+      &nbsp;&nbsp;&nbsp;&nbsp; smooth_scroll: true </br>
+
+### Global settings of R chunks
+
+```{r setup, include=TRUE}
+# Global options
+opts_chunk$set(echo=TRUE,
+	             cache=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+```
+
+### Libraries
+
+```{r libraries, include=TRUE}
+# All used libraries
+library("rmarkdown")
+library("knitr")
+library(tidyverse) # For data manipulation and visualization
+library(readr) # For reading data files
+library(stats) # For statistical analysis
+library(broom) # For tidying model output
+library(ggplot2) # For data visualisation
+library(sjstats) # For data visualization and analysis
+library(sjPlot)
+library(caret) # For creating predictive models
+library(interactions)
+library(stargazer)
+library(effects)
+```
+
+### Versions of used packages
+
+```{r versions, echo=FALSE}
+# Versions of used packages
+packages <- c("rmarkdown", "knitr")
+names(packages) <- packages
+lapply(packages, packageVersion)
+```
+
+### My enviroment
+
+```{r myR, echo=FALSE}
+# What is my R version?
+version[['version.string']]
+```
+
+## 1. Introduction
+
+The COVID-19 pandemic has had profound effects on mental health globally, with numerous studies documenting increased psychological distress across various populations. The study by Cui et al. (2022), titled "COVID-19 Impact on Mental Health", explores the multifaceted impact of pandemic on mental health, highlighting employment income loss as a significant factor associated with increased psychological distress. The authors argue that the economic disruptions caused by the pandemic have exacerbated mental health problems, particularly among those who have experienced employment income loss. This replication project aims to extend the findings of Cui et al. by examining whether the impact of employment income loss on mental health varies based on individual's living arrangements.
+
+Cui et al.(2022) found that employment income loss during the pandemic was significantly associated with mental health problems. However, the study did not consider the potential moderating effect of living arrangements on this relationship. My replication project addresses this gap by hypothesizing that living arrangements (i.e., living alone versus living with others) moderate the impact of employment income loss on mental health. Specifically, I propose that individuals living alone who experience employment income loss will have a higher likelihood of mental health problems compared to those living with others.
+
+The rational behind this hypothesis is grounded in the extensive literature on social support and mental health. Social support has been consistently shown to buffer against adverse effects of stress and financial strain on mental health (PeConga et al.,2020;Buecker & Horstmann, 2021). Living with others may provide more opportunities for social support, potentially mitigating the negative impact of employment income loss on mental health. Conversely, individuals living alone may experience increased isolation and lack of support, making them more vulnerable to the mental health consequences of economic hardship. 
+
+While Cui et al. (2022) provide robust evidence linking employment income loss to mental health problems, one could counter-argue that the study's lack of consideration for moderating variables like marital status limits the generalization of its findings. By not accounting for the potential buffering effects of social support, the study may overlook important nuances in the relationship between economic strain and mental health. Additionally, the study's reliance on self-reported measures of mental health and employment income loss could introduce bias, as respondents may under report or over report their experiences due to social desirability or recall bias. 
+
+To address these methodological concerns, my replication project will employ a logistic regression model with interaction terms to test the moderating effects of living arrangements on the relationship between employment income loss and mental health. By including control variables such as education level, and race/ethnicity, I aim to account for potential confounding factors that could influence mental health outcomes. 
+
+According to Freese and Peterson (2017), there are four types of replications: exact replications, conceptual replications, measurement replications, and simple replications. This project is a conceptual replication, as it tests the robustness of the original findings by introducing new moderating variable (marital status) and extending the analysis to examine the differential impact of employment income loss on mental health based on living status.
+
+I expect the results to confirm the direct relationship between employment income loss and mental health problems found by Cui et al. (2022). However, I also anticipate that this relationship will be moderated by martial status, with a stronger negative impact on mental health for individuals living alone. This hypothesis is supported by recent research emphasizing the critical role of social support in mitigating the negative effects of financial strain on mental health (Chin et al., 2023; Szkody et al., 2021, 2020; Argabright et al., 2022).
+
+In all, this replication project aims to extend the findings of Cui et al. (2022) by exploring the moderating effect of marital status on the relationship between employment income loss and mental health during the COVID-19 pandemic. By incorporating the concept of social support, this study seeks to provide a more nuanced understanding of the factors influencing mental health during economic hardship, thereby contributing valuable insights to the broader literature on mental health and pandemic-related stress. 
+
+## 2. Data and methods
+
+### 2.1. Data
+
+The original study used data from the Public Use Files (PUF) of the Household Pulse Survey, conducted by the United States Census Bureau over a 12-week period during the COVID-19 pandemic in 2020. The study population consists of individuals from diverse backgrounds and regions across the country. Participants range from 18 to 88 years old, encompassing a comprehensive array of other demographic and health-related variables. For the analysis, the researchers included variables such as mental health status, employment income loss, marital status, race.ethnicity, education level, age, gender, and state-specific pandemic conditions. 
+
+This extension project employs the same Household Pulse Survey data, focusing on 1 week time frame during the COVID-19 pandemic in 2020. The data source remained the United States Census Bureau. For for manageability, I used a sampled subset comprising approximately 74,413 respondents. The variables selected for this analysis include the dependent variable (mental health), the primary independent variable (employment income loss, denoted as Wrkloss), and marital status (denoted as MS). Additionally, I included control variables such as race, and education level, to account for potential confounding effects. 
+
+### Data Preparation 
+```{r Read the data file}
+data <- read.csv("pulse2020_puf_01.csv")
+
+# Selecting variables of interest
+data <- data %>%
+  select(WRKLOSS, MS, EEDUC, RRACE, ANXIOUS, WORRY, INTEREST, DOWN)
+
+# Create binary mental health variable
+data <- data %>%
+  mutate(MentalHealth = ifelse(ANXIOUS >= 3 | WORRY >= 3 | INTEREST >= 3 | DOWN >= 3, 1, 0))
+
+data$MS <- factor(data$MS, levels = c(1, 2, 3, 4, 5), labels = c("Now Married", "Widowed", "Divorced", "Separated", "Never Married"))
+
+# Remove rows with negative values in key variables
+data_new <- data %>%
+  filter(MentalHealth >= 0,
+         WRKLOSS %in% 1:2,
+         MS %in%
+           c("Now Married", "Widowed", "Divorced", "Separated", "Never Married"),
+         EEDUC >= 0,
+         RRACE >= 0)
+# Convert Key variables to factors
+data_new$education <- factor(data_new$EEDUC,
+                             levels = 1:4,
+                             labels = c("Less than High School", "High School", "Bachelor's Degree", "Graduate Degree"))
+
+data_new$race <- factor(data_new$RRACE,
+                        levels = 1:4,
+                        labels = c("White", "Black", "Asian", "Others"))
+
+data_new$employment_income_loss <- factor(data_new$WRKLOSS,
+                                          levels = c(1,2),
+                                          labels = c("Yes", "No"))
+
+data$MS <- factor(data$MS, levels = c(1, 2, 3, 4, 5), labels = c("Now Married", "Widowed", "Divorced", "Separated", "Never Married"))
+
+# Create a binary variable for living alone or with others
+data_new$living_status <- ifelse(data_new$MS %in% c("Widowed", "Divorced", "Separated", "Never Married"), "Alone", "With Others")
+
+data_new$living_status <- factor(data_new$living_status, levels = c("Alone", "With Others"))
+
+# Removing NAs
+data_new <- na.omit(data_new)
+
+```
+
+```{r}
+# Bar charts for categorical variables
+# Employment income loss distribution
+ggplot(data_new, aes(x = employment_income_loss)) +
+  geom_bar(aes(y = ..prop.., group = 1), fill = "plum3") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Distribution of Employment Income Loss", y = "Percentage") +
+  theme_minimal()
+
+# Marital  status distribution
+ggplot(data_new, aes(x = MS)) +
+  geom_bar(aes(y = ..prop.., group = 1),
+           fill = "Skyblue") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Distribution of Marital Status", x = "Marital Status", y = "Percentage") +
+  theme_minimal()
+
+# Education distribution
+ggplot(data_new, aes(x = education)) +
+  geom_bar(aes(y = ..prop.., group = 1), fill = "coral") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Distribution of Education Levels", x = "Education", y = "Percentage") +
+  theme_minimal()
+
+# Race distribution
+ggplot(data_new, aes(x = race)) +
+  geom_bar(aes(y = ..prop.., group = 1), fill = "darkmagenta") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Distribution of Race", x = "Race", y = "Percentage") +
+  theme_minimal()
+
+# Mental health distribution 
+ggplot(data_new, aes(x = MentalHealth)) +
+  geom_bar(aes(y = ..prop.., group = 1), fill = "burlywood") +
+  labs(title = "Distribution of Mental Health Status", x = "Mental Health (Binary", y = "Percentage") +
+  theme_minimal()
+
+```
+
+### 2.2. Methods
+
+In the original paper, the researchers employed multiple imputation by chained equations (MICE) to handle missing data, ensuring robust and unbiased estimates by creating multiple complete datasets and averaging the results. This approach accounts for the uncertainty around missing values. For the analysis, they used logistic regression with the least absolute shrinkage and selection operator (Lasso) method. Lasso helps in variable selection and regularization, enhancing model prediction accuracy by shrinking the less important coefficients to zero, thereby addressing potential multicollinearity and over fitting issues.
+
+In contrast, for my project, I will utilize regression with interaction terms without Lasso regularization. I chose this method to directly assess the interaction between employment income loss and marital statuses on mental health outcomes. This approach will allow me to explicitly test my hypothesis about whether the impact of income loss on mental health varies between individuals living alone and those living with others. I included interaction terms between employment income loss and marital status, using dummy variables for different marital statuses (Widowed, Divorced, Separated, Never marries).
+
+I maintained the control variables (gender, education level, race/ethnicity) to account for potential confounding factors, ensuring my findings are not biased by these demographic differences. Diagnostic checks are performed to ensure no multicollinearity issues and appropriate model fit. I opted against Lasso due to my specific focus on interaction effects, and the sample size was sufficient to avoid over fitting concerns typically addressed by Lasso. Literature supports this approach for hypothesis testing where interaction terms are central to the research question (Aiken & West, 1991).
+
+This strategy allows a more straightforward interpretation of the interaction effects, providing clear insights into how income loss impacts mental health across different living arrangements during the COVID-19 pandemic. 
+
+## 3. Results
+
+```{r}
+# Fit logistic regression model
+model_original <- glm(MentalHealth ~ MS + education + race,
+                      data = data_new, family = binomial(link = "logit"))
+
+# Summary of the model
+summary(model_original)
+
+# Create a comparative table of the model results
+stargazer(model_original, type = "text",
+          title = "Logistic Regression Results",
+          dep.var.labels = "Mental Health",
+          covariate.labels = c("Employment Income Loss (Yes)","Employment Income Loss (No)",
+                               "Widowed", "Divorced", "Separated", "Never Married", "Less than High school", "High School", "Bachelor's Degree", "Graduate Degree", "White", "Black", "Asian", "Others",
+                               "Employment Income Loss (Yes):Widowed", "Employment Income Loss (Yes):Divorced", "Employment Income Loss (Yes):Separated", "Employment Income Loss (Yes):Never Married"),
+          ci = TRUE, ci.level = 0.95,
+          single.row = TRUE)
+```
+
+
+Model 1 examines the relationship between mental health and various predictors including marital status, education and race.
+
+ -*Marital Status*: 
+          - Widowed individuals have significantly lower odds of experiencing mental health issues compared to married individuals (Estimate: -0.224, p < 0.001).
+          - Divorced (Estimate: 0.389, p < 0.001), separated (Estimate: 0.738, p < 0.001), and never married individuals (Estimate: 0.525, p < 0.001) show higher odds of mental health problems, suggesting these groups are more vulnerable.
+ 
+ -*Education*: Those with a Bachelor's degree (Estimate: -0.275, p < 0.05) and a Graduate degree (Estimate: -0.236, p < 0.05) are less likely to report mental health problems compared to individuals with less than a high school education. However, having only a high school diploma does not show a significant impact (p = 0.644).
+ 
+ -*Race*: The 'Others' racial category is significantly associated with higher odds of mental health issues compared to White individuals (Estimate: 0.234, p < 0.001). However, Black (p = 0.529) and Asian (p = 0.226) races do not show significant differences from Whites.
+
+```{r}
+# Fit logistic regression model with interaction terms
+
+model2 <- glm(MentalHealth ~ employment_income_loss * living_status + education + RRACE,
+              data = data_new,
+              family = binomial(link = "logit"))
+
+# Summary of the model
+summary(model2)
+
+# Create comparative table of the model results
+stargazer(model2, type = "text",
+          title = "Logistic Regression Results2",
+          dep.var.labels = "Mental Health",
+          covariate.labels = c("Employment Income Loss (Yes)", "Living Alone",
+                               "Less than High School", "Bachelor's Degree", "Graduate Degree", "White", "Black", "Asian", "Others",
+                               "Employment Income Loss (Yes):Living Alone"),
+          ci = TRUE, ci.level = 0.95,
+          single.row = TRUE)
+
+# Create interaction plot
+interaction_plot <- cat_plot(model2,
+                                  pred = employment_income_loss, modx = living_status,
+                                  plot.points = TRUE,
+                                  interval = TRUE,
+                                  main.title = "Interaction between Employment Income Loss and Living Status on 
+                             Mental Health",
+                                  x.label = "Employment Income Loss", y.label = "Predicted Probability of Mental Health Issues")
+
+print(interaction_plot)
+```
+
+```{r}
+# Create a comparative table of the model results
+tab_model(model2,
+          title = "Logistic Regression Results",
+          dv.labels = "Mental Heath",
+          pred.labels = c("Employment Income Loss (Yes)", "Living Alone",
+                          "Less than High School",
+                          "High School", "Bachelor's Degree",
+                          "Graduate Degree",
+                          "White", "Black", "Asian", "Others", "Employment Income Loss (Yes):Living Alone"),
+          show.ci = TRUE,
+          show.p = TRUE,
+          show.se = TRUE)
+```
+
+
+
+**Model 2:** This model adds interaction terms between employment income loss and living status and Mental Health.
+
+1. **Employment Income Loss:** As expected, experiencing employment income loss was associated with higher odds of mental health problems. Individuals without employment income loss have significantly lower odds of experiencing mental health issues compared to those with income loss (Estimate: -0.549, p < 0.001).
+
+2. **Living Status:** Interestingly, living with others and not experiencing employment income loss were associated with lower odds of mental health issues (Estimate: -0.331, p < 0.001) compared to living alone. 
+
+3. **Educate:** Similar to Model 1 (Model_original), a Bachelor's degree (Estimate: -0.257, p < 0.05) is associated with lower odds of mental health problems. A Graduate degree shows a marginally significant reduction in odds (Estimate: -0.210, p = 0.052), while a high school diploma does not have a significant impact (p = 0.759). 
+
+4. **Race:** The race variable shows a small but significant effect, indicating slight differences in mental health odds among racial groups (Estimate: 0.054, p < 0.001).
+
+
+5. **Interaction Effects:** The interaction between employment income loss and living with others significantly reduces the odds of mental health problems (Estimate: -0.126, p < 0.05). This interaction suggests that the benefits of living with others are particularly pronounced for those not facing financial stress due to employment income loss. 
+
+#### Interpretation of Results
+
+1. **Employment Income Loss and Mental Health**: The finding that employment income loss is associated with higher odds of mental health problems is consistent with previous literature (Cui et al., 2022). Economic instability during the pandemic significantly impacted individual's mental well-being, underscoring the importance of financial security.
+
+2. **Living Arrangements as a Moderator**: Living arrangements significantly moderate the relationship between employment income loss and mental health. Individuals living alone and experiencing employment income loss are more likely to suffer fro mental health issues than those living with others. This supports the hypothesis that social support mitigates the adverse effects of financial strain on mental health (PeConga et al., 2020; Buecker & Horstmann, 2021). The presence of family or roommates likely provides emotional and practical support, which buffers against the psychological impact of job and income loss.
+
+3. **Marital Status and Mental Health**: The significant differences in mental health outcomes across marital statuses highlight the complex role of social relationships in mental health. Divorced, separated, and never-married individuals are more vulnerable to mental health issues, possibly due to lower levels of social support and higher levels of isolation. 
+
+4. **Education and Mental Health**: Higher education levels were associated with lower odds of reporting mental health problems. This could be due to various factors, including better coping mechanisms, higher income levels, and more stable employment situations among those with higher education. 
+
+5. **Racial Differences**: The racial disparities in mental health outcomes call attention to the intersection of race and economic vulnerability. The 'Others' racial category having higher odds of mental health issues suggests that minority groups faced disproportionate impacts during the pandemic. 
+
+#### Discussion and Implications
+
+The findings of this project highlight the critical role of social support in mitigating the negative effects of economic hardship on mental health. Public health interventions during economic crisis should consider the importance of social networks and aim to strengthen social support systems. Policies that provide financial assistance and employment support could alleviate the mental health burden on individuals experiencing job loss.
+
+These insights suggest targeted interventions are needed to support vulnerable groups, such as those facing marital transitions, lower educational attainment, and racial minorities. Policies aimed at enhancing financial stability and promoting social support networks could be particularly effective in improving mental health outcomes. 
+
+### Subgroup Analysis
+### Individuals Living Alone
+```{r}
+# Filter data for individuals living alone
+data_alone <- data_new %>% filter(living_status == "Alone")
+
+# Fit logistic regression model for individuals living alone
+model_alone <- glm(MentalHealth ~ employment_income_loss + education +RRACE,
+                   data = data_alone,
+                   family = binomial(link = "logit"))
+
+# Summary of the model for individuals living alone
+summary(model_alone)
+```
+
+### Individuals Living With Others
+```{r}
+# Filter data for individuals living with others
+data_others <- data_new %>% filter(living_status == "With Others")
+
+# Fit logistic regression model for individuals living with others
+model_others <- glm(MentalHealth ~ employment_income_loss + education + RRACE,
+                    data = data_others,
+                    family = binomial(link = "logit"))
+
+# Summary of the model for individuals living with others
+summary(model_others)
+
+```
+
+### Plot models for living statuses
+```{r}
+plot_model(model_alone, type = "pred", terms = "employment_income_loss") +
+  ggtitle("Effect of Employment Income Loss of Mental Health for Individuals Living Alone") +
+  xlab("Employment Income Loss") +
+  ylab("Predicted Probability of Mental Health Issues")
+
+
+plot_model(model_others, type = "pred", terms = "employment_income_loss") +
+  ggtitle("Effect of Employment Income Loss on Mental Health for Individuals Living With Others") +
+  xlab("Employment Income Loss") +
+  ylab("Predicted probability of Mental Health Issues")
+```
+
+
+The analysis demonstrates that employment income loss significantly impacts mental health, with the effect varying based on living status. Specifically, those living alone are more adversely affected by employment income loss compared to those living with others. Subgroup analysis and visualisations further elucidate these relationships, highlighting the differential impact on various demographic groups.
+
+## 4. Conclusions
+
+This replication study aimed to extend the findings of Cui et al. (2022) by examining whether living arrangements moderate the impact of employment income loss on mental health during the COVID-19 pandemic. The results corroborate the original study's finding that employment income loss significantly predicts mental health problems, emphasizing the profound impact of economic disruptions on psychological well-being. However, my study introduces a crucial nuance: the interaction between employment income loss and living status. 
+
+My findings indicate that individuals living alone who experienced employment income loss reported higher levels of mental health issues compared to those living with others. This supports the hypothesis that social support, more accessible to those living with others, mitigates the negative effects of financial strain. This moderating effect was not explored in the original study, highlighting a significant gap that my replication addresses. 
+
+Several factors could explain the differences between the studies. Firstly, the inclusion of living arrangements as a moderating variable in my analysis provided a more nuanced understanding of the mental health impacts of employment income loss. Secondly, my focus on a one-week timeframe might capture variations in pandemic-related stressors not apparent in the original study's broader timeframe. Lastly, differences in methodological approaches, such as my use of interaction terms without Lasso regularization could account for some discrepancies.
+
+In summary, while the original study highlighted the direct impact of employment income loss on mental health, my findings underscore the importance of social support systems. This insight is crucial for policymakers and mental health professionals, suggesting that interventions targeting economic support should also consider individual's social contexts to effectively mitigate the mental health impacts of economic hardship.
+
+## References
+
+Argabright, S.T. et al. (2022) Covid-19-related financial strain and Adolescent Mental Health, Lancet regional health. Americas. Available at: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9664255/ (Accessed: 10 May 2024). doi: 10.1016/j.lana.2022.100391
+
+Bureau, U.C. (2023) Household pulse survey public use file (PUF), Census.gov. Available at: https://www.census.gov/programs-surveys/household-pulse-survey/datasets.html (Accessed: 05 May 2024).
+
+Chin, B.N. et al. (2023) Longitudinal Associations of social support, everyday social interactions, and mental health during the COVID-19 pandemic, Journal of social and personal relationships. Available at: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9527129/ (Accessed: 20 May 2024). doi: 10.1177/02654075221130786
+
+Freese, J., & Peterson, D. (2017). Replication in social science. *Annual Review of Sociology*, 43, 147-165, [doi: 10.1146](https://www.annualreviews.org/doi/abs/10.1146/annurev-soc-060116-053450).
+
+PeConga, E.K. et al. (2020) Psychological Trauma: Theory, Research, Practice, and Policy, Resilience Is Spreading: Mental Health Within the COVID-19 Pandemic. Available at: https://www.careknowledge.com/media/47387/2020-38956-001.pdf http://dx.doi.org/10.1037/tra0000874 (Accessed: 05 May 2024).
+
+Buecker, S. and Horstmann, K.T. (2021) (PDF) loneliness and social isolation during the COVID-19 pandemic, Loneliness and Social Isolation During the COVID-19 Pandemic A Systematic Review Enriched With Empirical Evidence From a Large-Scale Diary Study. Available at: https://www.researchgate.net/publication/341653575_Loneliness_and_Social_Isolation_during_the_COVID-19_Pandemic (Accessed: 05 May 2024). DOI:10.1027/1016-9040/a000453
+
+Szkody, E. et al. (2021) Stress-buffering role of social support during COVID-19, Family process. Available at: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7753728/ (Accessed: 20 June 2024). doi: 10.1111/famp.12618
+
+## Appendix
+
+### Appendix 1. My enviroment (full information) 
+
+```{r session}
+# Detailed information about my environment
+sessionInfo()
+```
+
+### Appendix 2. Entire R code used in the project
+
+```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```

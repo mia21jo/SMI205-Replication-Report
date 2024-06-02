@@ -1,0 +1,220 @@
+---
+title: "SMI205_Preregistration_form"
+author: "210193628"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+
+---
+
+```{r setup, include=FALSE}
+# By default, the code chunks are hidden. 
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<!-- 
+The text surrounded by these arrows is for your information and is hidden when the final document is knitted.
+-->
+
+# 1. My replication project
+
+In the context of a replication project, I have chosen the paper titled "COVID-19 Impact On Mental Health". This research investigates the impact of the COVID-19 pandemic on mental health, focusing on various factors contributing to psychological distress. 
+The authors hypothesize that the pandemic has significantly affected individual's mental health, and several factors may contribute to increased psychological distress during this time. Their findings suggest that employment income loss, delayed or unmet medical care needs, housing insecurity, and having children enrolled in school are associated with a higher likelihood of experiencing mental health problems. 
+
+This paper provides valuable insights into the effects of the pandemic on mental health, but there is room for further exploration. My replication project aims to extend the findings related to employment income loss by focusing on the moderating effect of living arrangement (marital status) on the association between employment income loss and mental health.
+
+This is a preregistration of an extension project for the following study:
+
+> Cui, J. et al. (2022) Covid-19 impact on mental health - BMC Medical Research methodology, BioMed Central. Available at: https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01411-w 
+https://doi.org/10.1186/s12874-021-01411-w.
+
+This project focuses on the following claim made in the original study:
+
+- Claim: Employment income loss since the start of the pandemic is associated with an increased risk of mental health problems (page 9)
+
+My replication project aims to extend this claim by investigating whether the impact of employment income loss on mental health varies between individuals living alone and those living with others during the pandemic. 
+
+# 2. Planned project extention
+
+The original study establishes a link between employment income loss and mental health issues during the pandemic. However, it does not explore whether this relationship differs based on individual's living arrangements. My replication project aims to bridge this gap by examining the moderating effect of living arrangement (living alone or with others) on the association between employment income loss and mental health.
+
+## 2.1. Rationale for a new hypothesis
+
+My replication project introduces a new hypothesis that the impact of employment income loss on mental health during the pandemic may vary depending on an individual's living arrangements. I argue that the association between employment income loss and mental health may be moderated by whether an individual lives alone or with others. 
+
+My new claim is as follows:
+- New claim: The loss of employment income will have a stronger impact on mental health of individuals living alone compared to those living with others during the pandemic.
+
+This claim extends the original study by considering the potential moderating effect of living arrangements on the relationship between employment income loss and mental health. The original study established a link between employment income loss and mental health problems but did not account for differences in living arrangements. By addressing this gap, my replication project contributes to the broader literature on the factors influencing mental health during the pandemic.
+
+Recent research has continued to demonstrate the significance of social support in buffering against the negative effects of stress on mental health ((PeConga et al., 2020;Buecker & Horstmann, 2021). Living with others may provide more opportunities for social support and mitigate the negative impact of employment income loss on mental health. In contrast, individuals living alone might experience less social support, making them more vulnerable to the mental health consequences of employment income loss (Buecker & Horstmann, 2021). 
+
+My replication project's new claim and analysis align with contemporary research highlighting the importance of social support in mental health outcomes. By investigating the moderating effect of living arrangements, my study will offer valuable insights into how social support may protect against the adverse mental health effects of employment income loss during the pandemic. This information can inform targeted interventions and policies to support vulnerable individuals during times of economic hardship.
+
+
+## 2.2. Prediction
+
+My replication project predicts that the relationship between employment income loss and mental health will be moderated by living arrangements. Specifically, I anticipate that individuals who live alone and have experienced employment income loss will have a higher likelihood of experiencing mental health problems than those who live with others and have experienced employment income loss.
+
+I expect the results to extend the findings of the original study by showing that the impact of employment income loss on mental health is more pronounced for those living alone. This is because living alone may exacerbate the negative consequences of financial strain due to reduced social support and increased isolation. Research has consistently shown that social support plays a vital role in coping with stress and mitigating mental health issues (Lakey, 2020; Santini et al., 2020). The COVID-19 pandemic has further emphasized the importance of social connectedness and its impact on psychological well-being (Argabright et al., 2022).
+
+In the original study, the authors found a direct association between employment income loss and mental health problems (Banks et al., 2020). Building on this finding, my prediction is that this relationship will be strengthened for individuals living alone, as they might be more susceptible to the negative effects of employment income loss due to limited social support. Consequently, my results are expected to be both similar in the identification of a direct relationship and different in the demonstration of a moderating effect of living arrangement from the original study.
+<!--
+Write your new argument in a form of a hypothesis. 
+Neatly summarise what results you are expecting to get and whether you expect them to be similar or different from the original study, and why.
+-->
+
+> Hypothesis: 
+
+This replication project introduces a new hypothesis and extends the original study by incorporating marital status as a potential moderator in the relationship between employment income loss and mental health during the pandemic. As the analysis goes beyond the original study's scope, I expect to obtain results that both align with the original findings and provide additional insights.
+
+I expect my results to be similar to the original study in that they will demonstrate a direct relationship between employment income loss and mental health problems during the pandemic. This aligns with previous research indicating the adverse effects of financial strain on mental well-being (Argabright et al., 2022).
+
+However, my replication project's focus on marital status as a moderator may yield novel findings that differ from the original study. I predict that the impact of employment income loss on mental health will vary depending on an individual's marital status, with those who are unmarried experiencing a stronger association between employment income loss and mental health problems compared to those who are married. This expectation us based on research highlighting the importance of social support in mitigating the negative mental health effects of financial strain (Buecker & Horstmann, 2021).
+<!--
+Do you expect to get the same or  different results from the original study? Why?
+--->
+# 3. Data
+<!--
+List all data sources you will use and describe whether the same data was used in the original study.
+If you constructed any new datasets on a basis of multiple secondary data, carefully describe the process and additional data sources.- Dataset 2 name - explain if created on the basis of XXXXX and YYYY data. 
+-->
+- Dataset 1 name - Household Pulse Survey Public Use File (PUF)
+
+Source: U.S. Census Bureau
+
+This dataset was used in the original study. 
+
+Bureau, U.C. (2023) Household pulse survey public use file (PUF), Census.gov. Available at: https://www.census.gov/programs-surveys/household-pulse-survey/datasets.html
+
+# 4. Data analysis plan
+
+The data analysis plan for this replication project involves using logistic regression with interaction terms to test my hypothesis. 
+I will conduct a logistic regression analysis to model the relationship between the dependent variable (mental health: 0 = no, 1 = yes) and my primary independent variable (employment income loss: 1 = yes, 2 = no). My key interaction term will be between employment income loss and the four dummy variables representing marital status (widowed, divorced, separated, never married). 
+
+Control variables: To account for potential confounding effects, I will include covariates such as gender, age, education level, and race/ethnicity in my regression model. These covariates will help control for potential differences in mental health outcomes due to demographic factors. 
+
+## 4.1. Model specification
+<!--
+
+Explain what methods of data analysis you will use to answer your hypothesis. This is likely to be a regression model, so explain what kind of regression it is and why.
+Briefly explain how your model specification differs from the one used for Claim X.
+-->
+I will employ a logistic regression model with interaction terms. This is an appropriate choice for this analysis because the independent variable is binary. This type of regression allows me to model the probability of an individual experiencing mental health problems based on the predictor variables while considering the non-linear relationship between them.
+
+My model specification extends the original model used for the claim by incorporating interaction terms between employment income loss (primary independent variable) and marital status (moderating variable). By including these interaction terms, I can examine whether the effect of employment income loss on mental health problems varies across different marital status categories.
+
+By incorporating marital status as a moderating variable, the logistic regression model with interaction terms will enable me to assess whether the relationship between employment income loss and mental health problems is influenced by an individual's marital status. This analysis will provide a more comprehensive understanding of the potential factors affecting mental health during the pandemic.
+
+## 4.2. Variables
+<!--
+Describe all variables that you will use in your data analysis. Explain how they were measured and whether they were manipulated in any way. 
+-->
+
+__Dependent variable(s):___ Mental Health: A binary variable with 1 indicating having a mental health problem and 0 indicating no mental health problem. This variable is derived from the original PUF dataset. 
+
+__Independent variables (IVs):__
+
+- Employment income loss (Wrkloss): An indicator variable with 1 representing a loss of income since March 12, 2020, or expected loss in the next 4 weeks due to the pandemic, and 2 representing no loss of employment income.
+
+- Marital status (MS): A categorical variable with 5 levels indicating marital status: 1 = now married, 2 = widowed, 3 = divorced, 4 = separated, 5 = never married.
+
+__Control Variables: __
+
+- Race: A categorical variable with four levels: 1 = white, 2 = Black, 3 = Asian, 4 = others
+
+- Education (Educ): The highest degree of education completed, represented by four levels: 1 = less than high school, 2 = high school, 3 = Bachelor's degree, 4 = graduate degree.
+
+
+## 4.3. Interference criteria
+
+I will calculate p-values to assess the statistical significance of the coefficients in my logistic regression model. A p-value less than 0.05 will be considered statistically significant, indicating that the results are unlikely to be due to chance alone.
+
+<!--
+What criteria will you use to make inferences? These could be P-values, confidence intervals, and effect sizes.Example: We will use the standard p<0.05 criteria for determining if the statistical tests suggest that the results are significantly different from those expected if the null hypothesis. 
+-->
+
+## 4.4. Data exclusion
+
+To ensure the validity and reliability of my results, I will perform the following data exclusion criteria:
+
+___Missing data:___ I will examine the dataset for missing values. If a participant has missing data for any of the variables included in my analysis (employment income loss, marital status, mental health, race, age, and education), I will exclude that participant from the analysis.
+
+___Outliers:___ I will identify and handle outliers in the dataset. I will use box plots and scatterplots to visually inspect the distribution of continuous variables (age and education). For categorical variables, I will assess the frequency distributions to identify any unusual values. In the case of outliers, I will investigate the reasons behind the unusual values. If outliers are found to be genuine values, I will retain them in the analysis to maintain the representativeness of the sample. However, if the outliers result from data entry errors or other anomalies, I will either correct the errors or exclude the observations from the analysis.
+<!-- 
+How will you determine what data or observations, if any, to exclude from your analyses? How will outliers be handled? Will you use any check to determine it? Describe your data exclusion criteria here or state not applicable.
+
+Example: No checks will be performed to determine eligibility for inclusion besides verification that each respondent answered each of the survey questions. Outliers will be included in the analysis. 
+-->
+
+## 4.5. Missing data
+
+___1. Assess the extent of missing data:___ I will first evaluate the percentage of missing values for each variable included in my analysis (employment income loss, marital status, mental health, race, age and education).
+
+___2. Identify patterns of missing data:___ I will determine if there are any patterns or correlations between missing values and other variables. This will help decide on the best method to address the missing data.
+
+___3. Use mean/median substitution:___ As an alternative to multiple imputation which was used in the original study, I will consider replacing missing values with the mean or median value of the variable. While this approach preserves the sample size, it can bias the results if the missing data is not missing completely at random or if there are non-linear relationships between variables.
+<!-- 
+How will you deal with incomplete or missing data?
+Remember that if the final analysis does not follow the specified plan, any deviations must be either strongly justified or included as a separate, exploratory analysis. 
+
+State your process for dealing with missing data or state not applicable.
+
+Example: If a respondent does not answer at least three out of seven questions measuring attitudes, that observation will not be included in the analysis.
+--> 
+
+## 4.6. Exploratory data anlysis
+
+I will conduct explanatory data analysis to gain preliminary insights into the relationships between employment incomes loss, marital status, and mental health problems during the pandemic. This will include the following steps:
+
+___1. Univariate analysis:___ I will examine the distribution of each variable individually, including the calculation of descriptive statistics (mean, median, mode, standard deviation) and visualization of the data using histograms, boxplots, and bar charts.
+
+___2. Bivariate analysis:___ I will explore the relationships between pairs of variables using scatterplots, correlation coefficients, and cross-tabulation for categorical variables. This will me identify potential associations between employment income loss, marital status, and mental health problems. 
+
+___3. Exploring the impact of control variables:___ I will examine the relationships between mental health problems and control variables such as race, age, and education. This will provide insights into any confounding factors that may influence mental health during the pandemic
+<!-- 
+If you plan to explore your data to look for unexpected differences or relationships, please describe those tests here. 
+An exploratory test is any test where a prediction is not made up front, or there are multiple possible tests that you are going to use. A statistically significant finding in an exploratory test is a great way to form a new confirmatory hypothesis. Enter any plans for exploratory data analysis here or state not applicable.
+
+Example: We expect that certain demographic traits may be related to attitudes to migration. Therefore, we will look for relationships between demographic variables (such as age, gender, income) and the attitudinal measures.
+-->
+
+## 4.7. Other comments
+
+In this replication project, I have identified additional control variables that may have an impact on mental health during the pandemic, such as race, age, and education. By including these variables in my logistic regression model, I aim to account for potential confounding effects and provide a more comprehensive understanding of the factors influencing mental health during the pandemic. 
+
+Additionally, I will perform model diagnostics and assumptions checks to ensure the validity of my logistic regression analysis. This includes testing for multicollinearity, checking for linearity in the logit, and assessing the model's overall goodness-of-fit. 
+
+# 5. Session info
+
+This preregistration form was completed in the following R environment:
+
+```{r session}
+sessionInfo()
+```
+
+# 6. References
+
+<!--
+Add a list of referenced sources here, so datasets and literature.
+-->
+Argabright, S.T. et al. (2022) Covid-19-related financial strain and Adolescent Mental Health, Lancet regional health. Americas. Available at: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9664255/ (Accessed: 10 May 2024). doi: 10.1016/j.lana.2022.100391
+
+Bartlett J. (2021). [OSF preregistration template.Rmd ](https://github.com/BartlettJE/BartlettJE.github.io/blob/master/RMarkdown-scripts/OSF%20preregistration%20template.Rmd). GitHub (accessed 03/05/2023)
+
+Bowman, S. D., DeHaven, A. C., Errington, T. M., Hardwicke, T. E., Mellor, D. T., Nosek, B. A., & Soderberg, C. K. (2020). OSF Prereg Template. https://doi.org/10.31222/osf.io/epgjd. OSF (accessed 03/05/2023)
+
+Bureau, U.C. (2023) Household pulse survey public use file (PUF), Census.gov. Available at: https://www.census.gov/programs-surveys/household-pulse-survey/datasets.html (Accessed: 05 May 2024). 
+
+Cui, J. et al. (2022) Covid-19 impact on mental health - BMC Medical Research methodology, BioMed Central. Available at: https://bmcmedresmethodol.biomedcentral.com/articles/10.1186/s12874-021-01411-w (Accessed: 05 May 2024). 
+DOI - https://doi.org/10.1186/s12874-021-01411-w
+
+JingyuCui639. (2021). R-code-for-COVID-19-Impact-on-Mental-Health-over-Time/Step1-Data pre-processin.r at main · JingyuCui639/R-code-for-COVID-19-Impact-on-Mental-Health-over-Time. GitHub https://github.com/JingyuCui639/R-code-for-COVID-19-Impact-on-Mental-Health-over-Time/blob/main/Step1-Data%20pre-processin.r
+
+PeConga, E.K. et al. (2020) Psychological Trauma: Theory, Research, Practice, and Policy, Resilience Is Spreading: Mental Health Within the COVID-19 Pandemic. Available at: https://www.careknowledge.com/media/47387/2020-38956-001.pdf
+http://dx.doi.org/10.1037/tra0000874 (Accessed: 05 May 2024). 
+
+Buecker, S. and Horstmann, K.T. (2021) (PDF) loneliness and social isolation during the COVID-19 pandemic, Loneliness and Social Isolation During the COVID-19 Pandemic A Systematic Review Enriched With Empirical Evidence From a Large-Scale Diary Study. Available at: https://www.researchgate.net/publication/341653575_Loneliness_and_Social_Isolation_during_the_COVID-19_Pandemic (Accessed: 05 May 2024). DOI:10.1027/1016-9040/a000453
+
