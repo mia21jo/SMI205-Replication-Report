@@ -29,6 +29,8 @@ To determine whether the impact of employment income loss on mental health durin
 
 -*pulse2020_puf_01.csv:* - Week 1 data used for this project 
 
+-*Original Study R Code.zip:* - Full steps used in original study
+
 ## Dataset
 
 -*Source:* Household Pulse Survey Public Use File (PUF)
