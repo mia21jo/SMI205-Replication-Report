@@ -24,6 +24,11 @@ To determine whether the impact of employment income loss on mental health durin
 
 -*SMI205_Preregistration_form:* preregistration document for this replication extension
 
+# Scripts
+-*SMI205_Assessment2.Rmd:* - My whole project including full code for the analysis
+
+-*pulse2020_puf_01.csv:* - Week 1 data used for this project 
+
 ## Dataset
 
 -*Source:* Household Pulse Survey Public Use File (PUF)
