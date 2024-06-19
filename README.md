@@ -27,8 +27,6 @@ To determine whether the impact of employment income loss on mental health durin
 # Scripts
 -*SMI205_Assessment2.Rmd:* - My whole project including full code for the analysis
 
--*pulse2020_puf_01.csv:* - Week 1 data used for this project 
-
 -*Original Study R Code.zip:* - Full steps used in original study
 
 ## Dataset
